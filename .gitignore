@@ -3,3 +3,8 @@
 *.pyc
 __pycache__
 .vscode
+
+#.env files
+.env
+.dockerenv
+.dev-dockerenv
