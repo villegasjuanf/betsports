@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BetFútbol - Portal de Apuestas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            color: #fff;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            border: 2px solid #00ff88;
+            color: #00ff88;
+        }
+
+        .btn-register {
+            background-color: #00ff88;
+            color: #0f3460;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        .nav {
+            background-color: #16213e;
+            padding: 12px 0;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .nav-item {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #0f3460;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        /* Matches Section */
+        .matches-section {
+            background-color: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #00ff88;
+            border-bottom: 2px solid #0f3460;
+            padding-bottom: 10px;
+        }
+
+        .match-card {
+            background-color: #1a1a2e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #0f3460;
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .match-teams {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .team {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .team.home {
+            text-align: right;
+        }
+
+        .vs {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .odds-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .odd-btn {
+            background-color: #0f3460;
+            border: 2px solid #00ff88;
+            color: #fff;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .odd-btn:hover {
+            background-color: #00ff88;
+            color: #0f3460;
+            transform: scale(1.05);
+        }
+
+        .odd-label {
+            font-size: 12px;
+            color: #aaa;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .odd-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Betting Slip */
+        .betting-slip {
+            background-color: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .slip-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #00ff88;
+        }
+
+        .slip-empty {
+            text-align: center;
+            color: #aaa;
+            padding: 30px 0;
+        }
+
+        .bet-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #0f3460;
+            border-radius: 5px;
+            background-color: #1a1a2e;
+            color: #fff;
+            margin-top: 15px;
+        }
+
+        .btn-place-bet {
+            width: 100%;
+            padding: 15px;
+            background-color: #00ff88;
+            color: #0f3460;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-place-bet:hover {
+            background-color: #00dd77;
+            transform: translateY(-2px);
+        }
+
+        /* Live Badge */
+        .live-badge {
+            background-color: #ff3333;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">⚽ BetFútbol - El demo de la apuesta automática</div>
+            <div class="header-buttons">
+                <button class="btn btn-login">Iniciar Sesión</button>
+                <button class="btn btn-register">Registrarse</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="#" class="nav-item active">Fútbol</a>
+            <a href="#" class="nav-item">En Vivo</a>
+            <a href="#" class="nav-item">Ligas Principales</a>
+            <a href="#" class="nav-item">Mis Apuestas</a>
+            <a href="#" class="nav-item">Promociones</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Matches Section -->
+        <div class="matches-section">
+            <h2 class="section-title">Partidos de Hoy - La Liga</h2>
+
+            <!-- Match 1 - Live -->
+            <div class="match-card">
+                <div class="match-header">
+                    <span><span class="live-badge">EN VIVO</span> 67'</span>
+                    <span>La Liga • España</span>
+                </div>
+                <div class="match-teams">
+                    <div class="team home">Real Madrid</div>
+                    <div class="vs">2 - 1</div>
+                    <div class="team away">Barcelona</div>
+                </div>
+                <div class="odds-container">
+                    <button class="odd-btn">
+                        <span class="odd-label">Local</span>
+                        <span class="odd-value">1.85</span>
+                    </button>
+                    <button class="odd-btn">
+                        <span class="odd-label">Empate</span>
+                        <span class="odd-value">3.40</span>
+                    </button>
+                    <button class="odd-btn">
+                        <span class="odd-label">Visitante</span>
+                        <span class="odd-value">4.20</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Match 2 -->
+            <div class="match-card">
+                <div class="match-header">
+                    <span>Hoy 18:00</span>
+                    <span>La Liga • España</span>
+                </div>
+                <div class="match-teams">
+                    <div class="team home">Atlético Madrid</div>
+                    <div class="vs">VS</div>
+                    <div class="team away">Sevilla</div>
+                </div>
+                <div class="odds-container">
+                    <button class="odd-btn">
+                        <span class="odd-label">Local</span>
+                        <span class="odd-value">1.65</span>
+                    </button>
+                    <button class="odd-btn">
+                        <span class="odd-label">Empate</span>
+                        <span class="odd-value">3.80</span>
+                    </button>
+                    <button class="odd-btn">
+                        <span class="odd-label">Visitante</span>
+                        <span class="odd-value">5.50</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Match 3 -->
+            <div class="match-card">
+                <div class="match-header">
+                    <span>Hoy 20:30</span>
+                    <span>La Liga • España</span>
+                </div>
+                <div class="match-teams">
+                    <div class="team home">Valencia</div>
+                    <div class="vs">VS</div>
+                    <div class="team away">Real Sociedad</div>
+                </div>
+                <div class="odds-container">
+                    <button class="odd-btn">
+                        <span class="odd-label">Local</span>
+                        <span class="odd-value">2.10</span>
+                    </button>
+                    <button class="odd-btn">
+                        <span class="odd-label">Empate</span>
+                        <span class="odd-value">3.30</span>
+                    </button>
+                    <button class="odd-btn">
+                        <span class="odd-label">Visitante</span>
+                        <span class="odd-value">3.60</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Match 4 -->
+            <div class="match-card">
+                <div class="match-header">
+                    <span>Mañana 15:00</span>
+                    <span>Premier League • Inglaterra</span>
+                </div>
+                <div class="match-teams">
+                    <div class="team home">Manchester United</div>
+                    <div class="vs">VS</div>
+                    <div class="team away">Liverpool</div>
+                </div>
+                <div class="odds-container">
+                    <button class="odd-btn">
+                        <span class="odd-label">Local</span>
+                        <span class="odd-value">2.75</span>
+                    </button>
+                    <button class="odd-btn">
+                        <span class="odd-label">Empate</span>
+                        <span class="odd-value">3.20</span>
+                    </button>
+                    <button class="odd-btn">
+                        <span class="odd-label">Visitante</span>
+                        <span class="odd-value">2.60</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Betting Slip -->
+        <div class="betting-slip">
+            <h3 class="slip-title">Cupón de Apuestas</h3>
+            <div class="slip-empty">
+                <p>Tu cupón está vacío</p>
+                <p style="font-size: 14px; margin-top: 10px;">Selecciona cuotas para agregar apuestas</p>
+            </div>
+            <input type="number" class="bet-input" placeholder="Monto a apostar ($)">
+            <button class="btn-place-bet">Realizar Apuesta</button>
+        </div>
+        <!-- Betting Slip -->
+        <div class="betting-slip">
+            <h2 class="section-title">Apuesta automática</h2>
+            <div class="slip-empty">
+                {{table|safe}}
+            </div>
+            <form>
+                <input type="number" class="bet-input" placeholder={{value}} name="bet" value={{value}} step="5000">
+                <button class="btn-place-bet" type="submit">Calcular apuestas</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

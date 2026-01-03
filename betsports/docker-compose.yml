@@ -1,0 +1,83 @@
+services:
+
+  server:
+    env_file:
+      - .dockerenv
+    build: .
+    container_name: bs-server
+    command: bash start.sh
+    ports:
+      - 8008:8000
+    environment:
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: admin
+      DJANGO_SUPERUSER_EMAIL: villegasjuan@yahoo.com
+    depends_on:
+      - db
+      - broker
+    networks:
+      - net
+
+  worker:
+    env_file:
+      - .dockerenv
+    build: .
+    container_name: bs-worker
+    command: bash startworkers.sh
+    ports:
+      - 8007:8000
+      - 5508:5555
+    environment:
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: admin
+      DJANGO_SUPERUSER_EMAIL: villegasjuan@yahoo.com
+    depends_on:
+      - db
+      - broker
+      - server
+    networks:
+      - net
+
+  db:
+    image: 'postgres'
+    container_name: bs-db
+    restart: always
+    ports:
+      - 5482:5432
+    volumes:
+      - db_data:/var/lib/postgresql/
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: betsports
+    env_file:
+      - .dockerenv
+    networks:
+      - net
+
+  broker:
+    build:
+      dockerfile: .Dockerfile-rabbitmq
+    container_name: bs-broker
+    ports:
+      - 5602:5672
+      - 15602:15672
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq/
+      - rabbitmq-log:/var/log/rabbitmq/
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+  rabbitmq-data:
+    driver: local
+  rabbitmq-log:
+    driver: local
