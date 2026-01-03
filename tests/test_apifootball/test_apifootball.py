@@ -1,5 +1,7 @@
 import pytest
 from datetime import datetime, timedelta
+from extractor.apifootball.api_extractor import ApiExtractor
+
 
 class TestApiFootball:
 
@@ -42,7 +44,7 @@ class TestFixtures:
 class TestOdds:
 
     def test_get_odds(self, extractor):
-        response = extractor.get_odds(239, 2025, datetime.now() - timedelta(days=0))
+        response = extractor.get_odds(239, 2026, 32)
         assert response['errors'] == []
 
     def test_mapping(self, extractor):

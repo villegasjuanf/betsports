@@ -1,8 +1,8 @@
 import os
-import requests
+import httpx
 import logging
 import time
-from datetime import datetime
+
 
 
 logger = logging.getLogger(__name__)
@@ -23,13 +23,13 @@ class ApiExtractor:
 
     def get(self, api: str, **kwargs):
         url = f'{self.url_base}{api}'
-        self.response = requests.get(url, headers=self.headers, params=kwargs)
-        self.ok = self.response.status_code < 400
+        self.response = httpx.get(url, headers=self.headers, params=kwargs)
+        time.sleep(self.sleep)
 
+        self.ok = self.response.status_code < 400
         if self.response.status_code >= 400:
             logger.error(f'resquest to {url} returns {self.response.status_code}')
 
-        time.sleep(self.sleep)
         if 'errors' in self.response.json().keys():
             self.errors.extend(self.response.json().get('errors', []))
 
@@ -37,7 +37,7 @@ class ApiExtractor:
 
     def post(self, api: str, **kwargs):
         url = f'{self.url_base}{api}'
-        self.response = requests.post(url, headers=self.headers, json=kwargs)
+        self.response = httpx.post(url, headers=self.headers, json=kwargs)
         self.ok = self.response.status_code < 400
 
         if self.response.status_code >= 400:

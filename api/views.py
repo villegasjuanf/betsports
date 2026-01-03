@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from adrf import viewsets
 from api.serializers import (CountrySerializer, LeagueSerializer, FixtureSerializer, TeamSerializer,
                              OddSerializer, BookmakerSerializer, BetSerializer)
 from extractor.models import Country, League, Team, Fixture, Odds, BookMaker, Bet

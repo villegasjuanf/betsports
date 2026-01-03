@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     # apps
     'extractor',
     'api',
-    'analytics',
 
     # packages
     'rest_framework',

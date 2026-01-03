@@ -1,6 +1,6 @@
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from rest_framework import routers
+from adrf import routers
 import api.views as viewsets
 
 router = routers.DefaultRouter()

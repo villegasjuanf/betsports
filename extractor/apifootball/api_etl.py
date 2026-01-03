@@ -10,17 +10,17 @@ import logging
 logger = logging.getLogger(__name__)
 
 def calculate_avg(fixture):
-    data = dict(
-        home_favor_goals_avg=fixture.f_home_favor_goals_avg,
-        home_against_goals_avg=fixture.f_home_against_goals_avg,
-        away_favor_goals_avg=fixture.f_away_favor_goals_avg,
-        away_against_goals_avg=fixture.f_away_against_goals_avg,
-        home_league_goals_avg=fixture.f_home_league_goals_avg,
-        away_league_goals_avg=fixture.f_away_league_goals_avg,
-        home_n=fixture.f_home_n,
-        away_n=fixture.f_away_n,
-        league_n=fixture.f_league_n,
-    )
+    data = {
+        'home_favor_goals_avg': fixture.f_home_favor_goals_avg,
+        'home_against_goals_avg': fixture.f_home_against_goals_avg,
+        'away_favor_goals_avg': fixture.f_away_favor_goals_avg,
+        'away_against_goals_avg': fixture.f_away_against_goals_avg,
+        'home_league_goals_avg': fixture.f_home_league_goals_avg,
+        'away_league_goals_avg': fixture.f_away_league_goals_avg,
+        'home_n': fixture.f_home_n,
+        'away_n': fixture.f_away_n,
+        'league_n': fixture.f_league_n,
+    }
     Fixture.objects.filter(id=fixture.id).update(**data)
 
 
