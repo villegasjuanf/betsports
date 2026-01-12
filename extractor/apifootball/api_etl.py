@@ -74,7 +74,7 @@ class ApiFootball:
             model = mapper(Fixture, data)
             model.season = Season.objects.get(id=f'{data["league"]["id"]}-{season.year}')
             models.append(model)
-            
+
         return bulk_create_or_update(
             Fixture, models,
             ['date', 'status', 'periods', 'score', 'home_goals', 'away_goals'])
@@ -134,6 +134,7 @@ class ApiFootball:
                     away_passes_accurate=response['away'].get("Passes accurate")
                 )
                 models.append(model)
+
         return bulk_create_or_update(Stats, models)
 
 
@@ -145,31 +146,32 @@ class ApiFootball:
         for fixture in response:
             for bookmaker in fixture['bookmakers']:
                 for bet in bookmaker['bets']:
-                    odd = Odds(
-                        id=f'{bookmaker["id"]}-{bet["id"]}-{fixture["fixture"]["id"]}',
-                        bookmaker=BookMaker.objects.get(id=bookmaker['id']),
-                        bet=Bet.objects.get(id=bet['id']),
-                        fixture=Fixture.objects.get(id=fixture['fixture']['id'])
-                        )
-                    if odd.bookmaker and odd.bet and odd.fixture:
-                        try:
-                            odd.save()
-                        except IntegrityError as e:
-                            logger.warning(e)
-                        for value in bet['values']:
-                            prob_name = bet_catalog.filter(bet=odd.bet, key=value['value']).first().prob_name\
-                                if bet_catalog.filter(bet=odd.bet, key=value['value']).exists() else ''
-                            odd_value = OddValues(
-                                id=f'{odd}-{value["value"]}',
-                                odd=odd,
-                                key=value['value'],
-                                value=value['odd'],
-                                prob_name=prob_name
-                                )
+                    if Fixture.objects.filter(id=fixture['fixture']['id']).exists():
+                        odd = Odds(
+                            id=f'{bookmaker["id"]}-{bet["id"]}-{fixture["fixture"]["id"]}',
+                            bookmaker=BookMaker.objects.get(id=bookmaker['id']),
+                            bet=Bet.objects.get(id=bet['id']),
+                            fixture=Fixture.objects.get(id=fixture['fixture']['id'])
+                            )
+                        if odd.bookmaker and odd.bet and odd.fixture:
                             try:
-                                odd_value.save()
+                                odd.save()
                             except IntegrityError as e:
                                 logger.warning(e)
+                            for value in bet['values']:
+                                prob_name = bet_catalog.filter(bet=odd.bet, key=value['value']).first().prob_name\
+                                    if bet_catalog.filter(bet=odd.bet, key=value['value']).exists() else ''
+                                odd_value = OddValues(
+                                    id=f'{odd}-{value["value"]}',
+                                    odd=odd,
+                                    key=value['value'],
+                                    value=value['odd'],
+                                    prob_name=prob_name
+                                    )
+                                try:
+                                    odd_value.save()
+                                except IntegrityError as e:
+                                    logger.warning(e)
 
     def get_bets(self):
         response = self.api.get_bets()['response']

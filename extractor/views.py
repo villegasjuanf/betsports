@@ -124,10 +124,11 @@ def render_widget(request):
         value = float(value) if value else 10000
     else:
         value= 10000
+    kelly_columns = ['bookmaker', 'country', 'league', 'home', 'away', 'date', 'bet', 'key', 'kelly']
     start_date, end_date = datetime.now() - timedelta(7), datetime.now() + timedelta(15)
     results = kelly_function(date_filter=(start_date, end_date), kelly_factor=1 / 2)
     df = pd.DataFrame.from_records(results.values())
-    dg = pd.DataFrame(columns=df.columns)
+    dg = pd.DataFrame(columns=kelly_columns)
     while dg.kelly.sum() < 1. and not df.empty:
         df.loc[:, 'k0'] = df.kelly.cumsum() / df.kelly.sum()
         df.loc[:, 'k1'] = df.k0.shift(fill_value=0)
@@ -137,10 +138,11 @@ def render_widget(request):
         df.drop(index=row.index, inplace=True)
         df.drop(index=df.loc[df.kelly > 1 - dg.kelly.sum(), :].index)
 
-    output = dg[['bookmaker', 'country', 'league', 'home', 'away', 'date', 'bet', 'key', 'kelly']]
+    output = dg[kelly_columns]
     output.loc[:, ('date',)] = output.date.apply(lambda x: datetime.strftime(x, '%Y-%m-%d'))
     output.loc[:, ('valor apuesta',)] = (output.kelly / output.kelly.sum() * value).apply(lambda x: f"$ {x:,.0f}")
     output = output.drop(columns=['kelly'])
+
     return render(request, 'bets_portal.html', 
                   context={
                       'table': build_table(output, 'blue_dark',

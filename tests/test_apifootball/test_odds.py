@@ -28,7 +28,7 @@ class TestOdds:
 
     @pytest.mark.django_db
     def test_odds_api(self, bet, bookmaker, fixture, apifootball):
-        response = apifootball.get_odds(league=135, season=2025, bookmaker=32)
+        response = apifootball.get_odds(league=135, season='135-2025', bookmaker=32)
         assert response
 
 
