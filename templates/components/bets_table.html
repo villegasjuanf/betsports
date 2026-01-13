@@ -1,0 +1,41 @@
+{% load tz %}
+<div class="overflow-x-auto scroll-auto">
+    <table class="table text-2xl p-4">
+    <thead class="text-center sm:text-3xl lg:text-xl"></thead>
+        <tr class="text-center sm:text-3xl lg:text-xl">
+            <th>Fecha</th>
+            <th>Liga</th>
+            <th>Partido</th>
+            <th>Apuesta</th>
+            <th>Valor</th>
+            <th>Ganancia</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i, item in bets.iterrows %}
+        <tr>
+            <td>
+                <div class="font-bold sm:text-xl lg:text-base">{{item.date|date:"Y-m-d"}}<br>{{item.date|timezone:"America/Bogota"|date:"h:i a"}}</div>
+            </td>
+            <td class="sm:text-2xl lg:text-base item-center">
+                <div>
+                    <img src="{{item.flag}}" style="height:24px" alt="{{item.country}}"/>
+                </div><br>
+                <div>{{item.league|truncatechars:8}}</div>
+            </td>
+            <td>
+                <img class="px-0" style="height:24px" src="{{item.home_badge}}" alt="{{item.home}}"/>{{item.home|truncatechars:8}}<br>
+                <img class="px-0" style="height:24px" src="{{item.away_badge}}" alt="{{item.away}}"/>{{item.away|truncatechars:8}}
+            </td>
+            <td>{{item.bookmaker}}<br>{{item.key}}</td>
+            <td>${{item.kelly|floatformat:0}} x {{item.value}}</td>
+            <td>${{item.expected|floatformat:0}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="5"></td>
+            <td>${{total|floatformat:0}}</td>
+        </tr>
+    </tbody>
+    </table>
+</div>
