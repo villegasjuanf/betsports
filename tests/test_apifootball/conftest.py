@@ -2,7 +2,14 @@ from datetime import datetime
 import pytest
 from extractor.apifootball.api_extractor import ApiExtractor
 from extractor.apifootball.api_etl import ApiFootball
-from extractor.models import BookMaker, Bet, Fixture
+from extractor.models import BookMaker, Bet, Fixture, UserConfig, User
+
+
+@pytest.fixture
+def admin(admin_user):
+    user = User.objects.get(username='admin')
+    UserConfig.objects.create(user=user)
+    return user
 
 @pytest.fixture
 def bookmaker():
