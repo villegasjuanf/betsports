@@ -172,6 +172,7 @@ class ApiFootball:
                                     odd_value.save()
                                 except IntegrityError as e:
                                     logger.warning(e)
+        return response
 
     def get_bets(self):
         response = self.api.get_bets()['response']
