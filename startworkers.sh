@@ -3,4 +3,4 @@ source .venv/bin/activate
 
 python manage.py collectstatic --noinput
 celery -A betsports multi start 2 -c 3 -l info --range-prefix=worker --max-tasks-per-child=2 &\
-uvicorn betsports.asgi:application --bind=0.0.0.0:8001 --log-level=info --timeout=600
+gunicorn betsports.wsgi:application --bind=0.0.0.0:8001 --log-level=info --timeout=600

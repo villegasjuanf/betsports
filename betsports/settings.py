@@ -21,12 +21,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8#p1ay&2exa_m0h!e%c@=+f19i-lgq)lp0(p!%v%^4j&m5*^#s'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False #os.environ.get('DEBUG', "FALSE") == "TRUE"
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'betsports.ngrok.dev',
+    ]
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'https://betsports.ngrok.dev'
@@ -58,9 +62,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_filters',
     'django_extensions',
-    'whitenoise',
     "import_export",
-
     'baton.autodiscover',
 ]
 
@@ -139,7 +141,7 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "INFO",
+        "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
     },
     "loggers": {
         "django": {
@@ -171,7 +173,6 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
     'REDOC_DIST': 'SIDECAR',
-    # OTHER SETTINGS
 }
 
 
@@ -189,19 +190,17 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = 'static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-STORAGES = {
+STATIC_ROOT = 'static'
+STATICFILES_DIRS = (BASE_DIR / "staticfiles",)
+STORAGES ={
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
