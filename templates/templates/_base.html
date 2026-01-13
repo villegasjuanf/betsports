@@ -1,0 +1,67 @@
+{% load static tailwind_tags django_htmx %}
+
+<!doctype html>
+<html lang=en>
+    <head>
+        <title>BetSports</title>
+        {% tailwind_css %}
+        {% htmx_script %}
+        <meta name="htmx-config" content='{"defaultSwapStyle":"outerHTML"}'>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    </head>
+
+    <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+        <div class="drawer lg:drawer-open">
+            <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+            <div class="drawer-content">
+                <!-- Navbar -->
+                <nav class="navbar w-full bg-base-300 sticky top-0 z-50">
+                    <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost mx-4">
+                        <!-- Sidebar toggle icon -->
+                        <span class="material-symbols-outlined">campaign</span>
+                    </label>
+                    <div class="flex-1 font-bold text-2xl px-4">Fonia</div>
+                    <div class="flex gap-2">
+                        <label class="input">
+                            <span class="material-symbols-outlined">search</span>
+                            <input type="text" class="grow" placeholder="Search" />
+                        </label>
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                                <div class="w-10 rounded-full">
+                                    <img
+                                        alt="Tailwind CSS Navbar component"
+                                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                </div>
+                            </div>
+                            <ul
+                                tabindex="-1"
+                                class="menu menu-sm dropdown-content bg-base-500 rounded-box z-1 mt-3 w-36 p-2 shadow">
+                                <li><a>Login</a></li>
+                                <li><a>Profile</a></li>
+                                <li><a>Settings</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div>
+                {% block body %}
+
+                {% endblock body %}
+                {% include 'fab.html' %}
+                </div>
+            </div>
+            <div class="drawer-side is-drawer-close:overflow-visible">
+                <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+                <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-32">
+                    <!-- Sidebar content here -->
+                    {% include "_base_sidebar.html" %}
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-column flex-wrap">
+            {% include "_base_footer.html" %}
+        </div>
+    </body>
+</html>

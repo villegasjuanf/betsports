@@ -16,17 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from api.urls import api_urls
 from extractor import views
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('baton/', include('baton.urls')),
-    path('api/', include(api_urls)),
-    path('', views.render_widget),
+    path('api/', include('api.urls')),
+    path('', views.render_widget, name='main'),
+    path('front/', include('front.urls'), name='front'),
     path('sync/', views.sync, name='sync'),
     path('probs/', views.probs_view, name='probs'),
     path('kelly/', views.kelly_view, name='kelly'),
     path('push/', views.push_button),
     path('save_fixtures/', views.save_fixtures, name='save_fixtures'),
 ]
+
+if settings.DEBUG:
+    # Include django_browser_reload URLs only in DEBUG mode
+    urlpatterns += [
+        path("__reload__/", include("django_browser_reload.urls")),
+    ]

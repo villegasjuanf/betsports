@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False #os.environ.get('DEBUG', "FALSE") == "TRUE"
+DEBUG = os.environ.get('DEBUG', "FALSE") == "TRUE"
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -62,9 +62,17 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_filters',
     'django_extensions',
-    "import_export",
+    'django_htmx',
+    'import_export',
     'baton.autodiscover',
+    'tailwind',
+    'theme',
 ]
+
+if DEBUG:
+    # Add django_browser_reload only in DEBUG mode
+    INSTALLED_APPS += ["django_browser_reload"]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -75,14 +83,25 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
+
+if DEBUG:
+    # Add django_browser_reload middleware only in DEBUG mode
+    MIDDLEWARE += [
+        "django_browser_reload.middleware.BrowserReloadMiddleware",
+    ]
 
 ROOT_URLCONF = 'betsports.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [
+            'templates',
+            'templates/templates',
+            'templates/components',
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -222,9 +241,11 @@ MQ_URL = os.environ.get('MQ_URL', '')
 CELERY_BROKER_URL = f'{MQ_URL}'
 DJANGO_CELERY_BEAT_TZ_AWARE = False
 
-
 BATON = {
     'SITE_HEADER': 'BetSports Administration',
     'SITE_TITLE': 'BetSports Admin',
     'INDEX_TITLE': 'Site Administration Dashboard',
     }
+
+# Tailwind
+TAILWIND_APP_NAME = "theme"

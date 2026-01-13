@@ -12,7 +12,7 @@ router.register(r'odd', viewsets.OddViewSet)
 router.register(r'bookmaker', viewsets.BookmakerViewSet)
 router.register(r'bet', viewsets.BetViewSet)
 
-api_urls = [
+urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
