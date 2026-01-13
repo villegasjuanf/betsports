@@ -5,7 +5,7 @@ from extractor.apifootball.api_etl import ApiFootball
 from extractor.models import BookMaker, Bet, Fixture
 
 @pytest.fixture
-def bookmaker(request):
+def bookmaker():
     bookmaker = BookMaker(
         id=32,
         name='bookmaker',
@@ -15,7 +15,7 @@ def bookmaker(request):
     return BookMaker.objects.get(id=32)
 
 @pytest.fixture
-def fixture(request):
+def fixture():
     fixture = Fixture(
         id=1489365,
         date=datetime(2025, 12, 1),
@@ -27,7 +27,7 @@ def fixture(request):
     return Fixture.objects.get(id=1489365)
 
 @pytest.fixture
-def bet(request):
+def bet():
     bet = Bet(
         id=3,
         name='bet'

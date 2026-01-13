@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from adrf import serializers
 from extractor.models import Country, League, Team, Venue, Fixture, Odds, Bet, BookMaker
 
 

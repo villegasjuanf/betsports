@@ -2,7 +2,7 @@ services:
 
   server:
     env_file:
-      - .dockerenv
+      - .docker-prd.env
     build: .
     container_name: bs-server
     command: bash start.sh
@@ -20,7 +20,7 @@ services:
 
   worker:
     env_file:
-      - .dockerenv
+      - .docker-prd.env
     build: .
     container_name: bs-worker
     command: bash startworkers.sh
@@ -53,7 +53,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: betsports
     env_file:
-      - .dockerenv
+      - .docker-prd.env
     networks:
       - net
 

@@ -4,7 +4,11 @@
 __pycache__
 .vscode
 
-#.env files
-.env
-.dockerenv
-.dev-dockerenv
+# .env files
+.docker-dev.env
+.docker-tst.env
+.docker-prd.env
+
+# static files
+staticfiles
+static

@@ -1,15 +1,16 @@
+'''
+API-Football API extractor
+'''
 import os
 import requests
 import logging
 import time
-from datetime import datetime
-
 
 logger = logging.getLogger(__name__)
 
 
 class ApiExtractor:
-    sleep = 0.5
+    sleep = .5
 
     def __init__(self) -> None:
         self.headers = {
@@ -17,22 +18,26 @@ class ApiExtractor:
             'x-rapidapi-key': os.environ.get('API_FOOTBALL_KEY')
             }
         self.url_base = os.environ.get('API_FOOTBALL_URL')
+        self.request_counter = {}
         self.errors = []
         self.response = None
         self.ok = None
 
     def get(self, api: str, **kwargs):
         url = f'{self.url_base}{api}'
+        logger.info(f'sending request to {api} with params {kwargs}')
         self.response = requests.get(url, headers=self.headers, params=kwargs)
-        self.ok = self.response.status_code < 400
+        time.sleep(self.sleep)
 
+        self.ok = self.response.status_code < 400
         if self.response.status_code >= 400:
             logger.error(f'resquest to {url} returns {self.response.status_code}')
 
-        time.sleep(self.sleep)
-        if 'errors' in self.response.json().keys():
+        if self.response.json().get('errors'):
             self.errors.extend(self.response.json().get('errors', []))
+            logger.error(self.response.json().get('errors', []))
 
+        self.request_counter[api] = self.request_counter.get(api, 0) + 1
         return self.response
 
     def post(self, api: str, **kwargs):
