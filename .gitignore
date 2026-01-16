@@ -8,3 +8,7 @@ __pycache__
 .env
 .dockerenv
 .dev-dockerenv
+
+static
+staticfiles
+theme/static_src
