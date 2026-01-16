@@ -1,0 +1,11 @@
+{% extends '_base.html' %}
+
+{% block body %}
+<div class=" max-h-full w-full z-100">
+    <h4 class="font-bold sm:text-5xl self-centered p-12">Apuesta a ganar, perder o empatar</h4>
+    <div hx-get="/front/bets_table/" hx-trigger="load"></div>
+    <br>
+    <h4 class="font-bold sm:text-5xl self-centered p-12">Próximos partidos</h4>
+    <div hx-get="/front/next_table/" hx-trigger="load"></div>
+</div>
+{% endblock body %}

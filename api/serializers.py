@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from extractor.models import Country, League, Team, Venue, Fixture, Odds, Bet, BookMaker
+from extractor.models import Country, League, Team, Venue, Fixture, Odds, Bet, BookMaker, Season, UserBets, UserBetItems
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -13,8 +13,14 @@ class LeagueSerializer(serializers.ModelSerializer):
         model = League
         fields = '__all__'
 
+class SeasonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Season
+        fields = '__all__'
+
 
 class TeamSerializer(serializers.ModelSerializer):
+    country = CountrySerializer()
     class Meta:
         model = Team
         fields = '__all__'
@@ -29,6 +35,7 @@ class VenueSerializer(serializers.ModelSerializer):
 class FixtureSerializer(serializers.ModelSerializer):
     home_team = TeamSerializer()
     away_team = TeamSerializer()
+    venue = VenueSerializer()
     class Meta:
         model = Fixture
         fields = '__all__'
@@ -49,4 +56,18 @@ class BetSerializer(serializers.ModelSerializer):
 class BookmakerSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookMaker
+        fields = '__all__'
+
+
+class UserBetsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserBets
+        fields = '__all__'
+
+
+class UserBetItemsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserBetItems
         fields = '__all__'

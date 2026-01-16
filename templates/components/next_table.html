@@ -1,0 +1,56 @@
+{% load tz %}
+<div class="overflow-x-auto scroll-auto">
+  <table class="table text-2xl p-4">
+    <!-- head -->
+    <thead>
+      <tr class="text-center sm:text-3xl lg:text-xl">
+        <th>
+          <label>
+            <input type="checkbox" class="checkbox" />
+          </label>
+        </th>
+        <th>Fecha</th>
+        <th>local</th>
+        <th> vs </th>
+        <th>visitante</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% regroup fixtures by season as season_list %}
+      {% for season in season_list %}
+        <tr>
+          <td class="p-4" colspan="4">
+            <div class="flex sm:text-2xl lg:text-base">
+            <img class="px-12" src="{{season.grouper.league.country.flag}}" style="height:24px" alt="{{season.grouper.league.country.name}}"/>
+            {{season.grouper.league.country.name}} - {{season.grouper}}</div>
+          </td>
+        </tr>
+        {% for item in season.list|dictsort:"date" %}
+          <tr class="sm:text-2xl lg:text-base">
+            <th>
+            <label>
+              <input type="checkbox" class="checkbox"/>
+            </label>
+          </th>
+          <td>
+            <div class="font-bold sm:text-xl lg:text-base">{{item.date|timezone:"America/Bogota"|date:"Y-m-d h:i a"}}</div>
+          </td>
+          <td>
+            <div class="flex font-bold">
+              <img class="px-2" style="height:24px" src="{{item.home_team.logo}}" alt="{{item.home_team.name}}"/>
+              {{item.home_team.name}}
+            </div>
+          </td>
+          <td> vs </td>
+          <td>
+            <div class="flex font-bold">
+              <img class="px-2" style="height:24px" src="{{item.away_team.logo}}" alt="{{item.away_team.name}}"/>
+              {{item.away_team.name}}
+            </div>
+          </td>
+          </tr>
+        {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

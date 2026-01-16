@@ -4,6 +4,7 @@
 __pycache__
 .vscode
 
+<<<<<<< HEAD
 #.env files
 .env
 .dockerenv
@@ -12,3 +13,13 @@ __pycache__
 static
 staticfiles
 theme/static_src
+=======
+# .env files
+.docker-dev.env
+.docker-tst.env
+.docker-prd.env
+
+# static files
+staticfiles
+static
+>>>>>>> d5ab788470e7199cb8b1fd6d69b8ed7c13e1d9a7

@@ -7,10 +7,10 @@ from extractor.models import Odds, Fixture, BookMaker, Bet
 class TestOdds:
 
     def test_odds_extractor(self, extractor):
-        response = extractor.get_odds(league=239, season=2025, bookmaker=32)
+        response = extractor.get_odds(league=135, season=2025, bookmaker=32)
         assert response['results'] > 0
 
-    @pytest.mark.django_db
+    @pytest.mark.skip(reason="odds don't use mapper")
     def test_odds_mapper(self, bet, bookmaker, fixture):
         data = {'id': 3,
                 'values': [
@@ -28,7 +28,7 @@ class TestOdds:
 
     @pytest.mark.django_db
     def test_odds_api(self, bet, bookmaker, fixture, apifootball):
-        response = apifootball.get_odds(league=239, season=2025, bookmaker=32)
+        response = apifootball.get_odds(league=135, season='135-2025', bookmaker=32)
         assert response
 
 

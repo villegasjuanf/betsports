@@ -46,6 +46,7 @@ class TestMapper:
                 'season': {
                     'id': '2020',
                     'year': 2020,
+                    'end': '2020-12-31',
                     'start': '2020-01-01',
                 },
                 'country': {
@@ -57,14 +58,14 @@ class TestMapper:
 
     @pytest.mark.django_db
     def test_country_mapping(self, country_response):
-        model = mapper(Country, country_response)
+        model = mapper(Country, country_response['response'])
         assert model.code == 236
         assert model.name == 'colombia'
         assert model.flag == 'http://'
 
     @pytest.mark.django_db
     def test_league_mapping(self, league_response):
-        model = mapper(League, league_response)
+        model = mapper(League, league_response['response'])
         assert model.id == 1
         assert model.name == 'La Liga'
         assert model.type == 'Football'
@@ -73,7 +74,7 @@ class TestMapper:
 
     @pytest.mark.django_db
     def test_season_mapping(self, league_response):
-        model = mapper(Season, league_response)
+        model = mapper(Season, league_response['response']['season'])
         assert model.id == '2020'
         assert model.year == 2020
         assert model.start == '2020-01-01'

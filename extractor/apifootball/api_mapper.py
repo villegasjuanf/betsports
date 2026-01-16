@@ -15,6 +15,7 @@ MAPPING = {
         'country': {'code': ['country', 'code']},
     },
     'Season': {
+        'id': ['id'],
         'year': ['year'],
         'start': ['start'],
         'end': ['end'],

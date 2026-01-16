@@ -248,6 +248,9 @@ def kelly_function(bookmaker: int | None = None, league: int | None = None, over
 
     result = expected.annotate(
         kelly=kelly_fn(kelly_factor),
+        flag=F('odd__fixture__season__league__country__flag'),
+        home_badge=F('odd__fixture__home_team__logo'),
+        away_badge=F('odd__fixture__away_team__logo')
         ).filter(kelly__isnull=False).order_by('-kelly')
 
     return result.filter(kelly__gt=0) if only_positives else result
