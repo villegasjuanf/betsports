@@ -1,6 +1,6 @@
 import os
 from django.db import models
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, Max, Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
@@ -272,6 +272,36 @@ class OddValues(models.Model):
 
     def __str__(self):
         return f'<Odd: id={self.odd.pk}> {self.odd.bet.name}: {self.key}'
+
+
+class UserBets(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    creation_date = models.DateTimeField(auto_now=True)
+    amount = models.FloatField(null=True)
+
+
+class UserBetItems(models.Model):
+    userbet = models.ForeignKey(UserBets, on_delete=models.CASCADE)
+    fixture = models.ForeignKey(Fixture, on_delete=models.CASCADE)
+    odd_value = models.ForeignKey(OddValues, on_delete=models.CASCADE)
+    value = models.FloatField(null=True)
+    fixed_value = models.BooleanField(default=False)
+
+@receiver(post_save, sender=UserBetItems, dispatch_uid="update_bet")
+def update_bet(sender, instance, **kwargs):
+    if not instance.fixed_value:
+        return
+
+    items = UserBetItems.objects.filter(userbet=instance.userbet, fixed_value=False).exclude(pk=instance.pk)
+    if items.count() == 0:
+        return
+
+    rate = (instance.userbet.amount - UserBetItems.objects.filter(userbet=instance.userbet, fixed_value=True).aggregate(sum=Sum('value'))['sum']) / items.aggregate(sum=Sum('value'))['sum']
+    if rate < 0:
+        raise ValueError
+
+    for item in items:
+        UserBetItems.objects.filter(pk=item.pk).update(value = rate * item.value)
 
 
 class Stats(models.Model):

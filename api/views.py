@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from api.serializers import (CountrySerializer, LeagueSerializer, FixtureSerializer, TeamSerializer,
                              OddSerializer, BookmakerSerializer, BetSerializer)
 from extractor.models import Country, League, Team, Fixture, Odds, BookMaker, Bet
+from django.utils.timezone import now
+from datetime import timedelta
 
 
 class CountryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -20,7 +22,10 @@ class TeamViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class FixtureViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Fixture.objects.filter(home_team__country__sync_on=True, away_team__country__sync_on=True)
+    queryset = Fixture.objects.filter(
+        home_team__country__sync_on=True,
+        away_team__country__sync_on=True,
+        date__range=(now(), now() + timedelta(15)))
     serializer_class = FixtureSerializer
 
 

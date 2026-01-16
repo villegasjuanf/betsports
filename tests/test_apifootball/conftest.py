@@ -2,7 +2,7 @@ from datetime import datetime
 import pytest
 from extractor.apifootball.api_extractor import ApiExtractor
 from extractor.apifootball.api_etl import ApiFootball
-from extractor.models import BookMaker, Bet, Fixture, UserConfig, User
+from extractor.models import BookMaker, Bet, Fixture, UserConfig, User, Odds, OddValues
 
 
 @pytest.fixture
@@ -41,6 +41,19 @@ def bet():
         )
     bet.save()
     return Bet.objects.get(id=3)
+
+@pytest.fixture
+def odds(bookmaker, bet, fixture):
+    odds = Odds(
+        id='odd', bookmaker=bookmaker,
+        bet=bet, fixture=fixture)
+    odds.save()
+
+    values = OddValues(
+        id='values', odd=Odds.objects.get(id='odd'),
+        key='home', value=10.)
+    values.save()
+    return OddValues.objects.get(id='values')
 
 @pytest.fixture
 def extractor():
