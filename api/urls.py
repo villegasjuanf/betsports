@@ -12,6 +12,8 @@ router.register(r'fixture', viewsets.FixtureViewSet)
 router.register(r'odd', viewsets.OddViewSet)
 router.register(r'bookmaker', viewsets.BookmakerViewSet)
 router.register(r'bet', viewsets.BetViewSet)
+router.register(r'userbets', viewsets.UsetBetsViewSet)
+router.register(r'userbetitems', viewsets.UsetBetItemsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
